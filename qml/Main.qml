@@ -10,12 +10,8 @@ import QtQuick.Layouts 1.3
 
 
 App {
-    // You get free licenseKeys from https://felgo.com/licenseKey
-    // With a licenseKey you can:
-    //  * Publish your games & apps for the app stores
-    //  * Remove the Felgo Splash Screen or set a custom one (available with the Pro Licenses)
-    //  * Add plugins to monetize, analyze & improve your apps (available with the Pro Licenses)
-    //licenseKey: "<generate one from https://felgo.com/licenseKey>"
+
+    licenseKey:  "E4C85014F42886644ABD678B7B5A0FCBDF79FF02ABE0B30772DEBC728644E7DB24DEB2D31E5B89D7FC852C0A83856D806D82A96405C84136AAB523D01B7FD5A414520C72BEB0D99E4D1A8BDB4FF5EFE7ADE2D0B81A3F3296110A9C5A1DFBFE4D96BDD8C63DF88986A47E87C17BABDABA47B1BFC57E00F2196C9C4CDDC2CF02F030F34A9D5FC3F2521BDF5A43A6FBAD21B31938B55A9D46533C415FD0BD7265125AD19CA42DE4BECB615F6040726A1216D7CB2F2377B6E26EE64BB6E5226BA64DD309FB24E579C89A9864AB67EA3D2D61ABAF00AF784022DB9D420D278731797D54A767121FF7654D1826E2D353294F47B11193C98B4078B35A87B2BDDEE805C1500D8C2BFE2F8C6DB64FB49088CF298AA1C6E8CFE3C143E2C3F372EEE902CBAC0998164978D361ABDC8103B77C31000CDC929A2A6F398B75179141D7709DCC38"
 
     // app initialization
     Component.onCompleted: {
@@ -26,9 +22,8 @@ App {
             logic.clearCache()
         }
 
-        // fetch todo list data
+        // fetch contact list data
         logic.fetchContacts()
-        logic.fetchDraftContacts()
     }
 
     // business logic
@@ -55,7 +50,7 @@ App {
     // view
     NavigationStack {
 
-        Page {
+         FlickablePage {
             id: page
             title: qsTr("Contacts List")
 
@@ -130,11 +125,35 @@ App {
                         anchors.verticalCenter: parent.verticalCenter
                         text: viewHelper.formatTitle(model)
                     }
+                    AppButton{
+                        id:callButton
+                        x: contactLogo.width
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.rightMargin: 40
+                        Icon{
+                            id:icon
+                            icon:IconType.phone
+                            color: "#008000"
+                            width: parent.height
+                            height: parent.height
+                            size: parent.height
+                        }
+
+
+                        backgroundColor: "#00000000"
+                        backgroundColorPressed : "#00000000"
+                        width: parent.height
+                        height: parent.height
+
+                        onClicked: nativeUtils.displayMessageBox("Unable to call")
+                    }
 
 
                     style.showDisclosure: false
                     // push detail page when selected, pass chosen contact id
-                    onSelected: page.navigationStack.popAllExceptFirstAndPush(detailPageComponent, { contactId: model.id, contactData:model })
+                    onSelected: page.navigationStack.popAllExceptFirstAndPush(detailPageComponent, { contactId: model.id})
 
                 }
                 //////////////////////////////////////////////////////////
@@ -200,7 +219,8 @@ App {
 
             Component {
                 id: detailPageComponent
-                ContactDetailPage { }
+                ContactDetailPage {
+                }
             }
         }
     }

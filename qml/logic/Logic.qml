@@ -6,8 +6,6 @@ Item {
 
     signal fetchContactDetails(int id)
 
-    signal fetchDraftContacts()
-
     signal clearCache()
 
     signal toggleFavorite(int id, bool isFavorite)

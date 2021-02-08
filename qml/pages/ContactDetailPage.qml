@@ -2,7 +2,7 @@ import Felgo 3.0
 import QtQuick 2.0
 
 Page {
-    id: page2
+    id: contactDeteilPage
     title: viewHelper.formatTitle(contactData)
 
     property bool isFavorite: contactData.fav

@@ -14,9 +14,6 @@ Item {
     readonly property alias contacts: _.contacts
     readonly property alias contactDetails: _.contactDetails
 
-    // action success signals
-    signal contactStored(var contact)
-
     // action error signals
     signal fetchContactsFailed(var error)
     signal fetchContactDetailsFailed(int id, var error)
@@ -54,7 +51,7 @@ Item {
             var cached = cache.getValue("contact_"+id)
             if(cached) {
                 _.contactDetails[id] = cached
-                contactDetailsChanged() // signal change within model to update UI
+                //contactDetailsChanged() // signal change within model to update UI
             }
 
             // load from api
@@ -72,8 +69,6 @@ Item {
                                    }
                                })
         }
-
-
         // action 3 - clearCache
         onClearCache: {
             cache.clearAll()
@@ -85,7 +80,7 @@ Item {
             ////Don't working                      ////
             ////I don't know why it didn't working////
             HttpRequest
-            .put("https://my-json-server.typicode.com/PronDmytro/JsonDB/contacts2/"+id)
+            .patch("https://my-json-server.typicode.com/PronDmytro/JsonDB/contacts2/"+id)
             .timeout(3000)
             .set( {fav: isFavorite})
             .end(function(err, res) {
@@ -103,24 +98,24 @@ Item {
     }
 
 
-    // rest api for data access
-    RestAPI {
-        id: api
-        maxRequestTimeout: 5000 // use max request timeout of 3 sec
+        // rest api for data access
+        RestAPI {
+            id: api
+            maxRequestTimeout: 5000 // use max request timeout of 3 sec
+        }
+
+        // storage for caching
+        Storage {
+            id: cache
+        }
+
+        // private
+        Item {
+            id: _
+
+            // data properties
+            property var contacts: []  // Array
+            property var contactDetails: ({}) // Map
+
+        }
     }
-
-    // storage for caching
-    Storage {
-        id: cache
-    }
-
-    // private
-    Item {
-        id: _
-
-        // data properties
-        property var contacts: []  // Array
-        property var contactDetails: ({}) // Map
-
-    }
-}
